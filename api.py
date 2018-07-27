@@ -1,4 +1,3 @@
-import flask
 from flask import Flask, request, render_template
 from sklearn.externals import joblib
 import numpy as np
