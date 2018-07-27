@@ -1,8 +1,6 @@
 from flask import Flask, request, render_template
 from sklearn.externals import joblib
 import numpy as np
-#from scipy import misc
-
 
 app = Flask(__name__)
 
@@ -14,7 +12,6 @@ def index():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-	#if request.method=='POST':
 		game_size = request.form['game_size']
 		party_size = request.form['party_size']
 		player_assists = request.form['player_assists']
@@ -25,10 +22,10 @@ def predict():
 		survival_time = request.form['player_survival_time']
 		parameters = np.array([game_size,party_size,player_assists,knockdowns,dist_walk,hitpoint,player_kills,survival_time])
 		prediction = model.predict(parameters.reshape(1, -1))
-		return render_template('index.html', label1 = prediction)
+		return render_template('index.html', label = prediction)
 	
 if __name__ == '__main__':
 	# load ml model
 	model = joblib.load('finalized_model.pkl')
 	# start api
-	app.run(host='0.0.0.0', port=8000, debug=True)
+	app.run(port=8000, debug=True)
