@@ -24,7 +24,7 @@ def predict():
 		prediction = model1.predict(parameters.reshape(1, -1))
 		if (prediction == -1):
 			return render_template('index.html', label = "You're an amateur! Play more to be amongst the top 10.")
-		else :
+		else:
 			prediction = model2.predict_proba(parameters.reshape(1,-1))
 			label = "You're an elite amongst the top 10. Rank Probability :" + str(prediction)
 			return render_template('index.html', label = label)
