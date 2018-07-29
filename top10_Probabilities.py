@@ -14,7 +14,7 @@ import pandas as pd
 import numpy as np
 
 # Reading data 
-data = pd.read_csv("C:\\agg_match_stats_0.csv", nrows=1000000)
+data = pd.read_csv("C:\\agg_match_stats_0.csv", nrows=500000)
 
 # Extracting needed data
 value_list = list(range(1,11))
@@ -39,7 +39,7 @@ df_minority = df[df.team_placement!=-1]
 # Downsample majority class
 df_majority_downsampled = resample(df_majority, 
                                  replace=False,    # sample without replacement
-                                 n_samples=270120, # to match minority class
+                                 n_samples=135167, # to match minority class
                                  random_state=42)  # reproducible results
 
 # Combine minority class with downsampled majority class
