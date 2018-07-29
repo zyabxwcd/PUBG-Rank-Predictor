@@ -2,7 +2,7 @@
 from sklearn.ensemble import RandomForestClassifier
 
 # For downsampling
-from sklearn.utils import resample
+from sklearn.utils import resample,shuffle
 
 # For saving the model to disk
 #from sklearn.externals import joblib
@@ -51,6 +51,9 @@ df_downsampled['is_train'] = np.random.uniform(0, 1, len(df_downsampled)) <= .70
 # Create two new dataframes, one with the training rows, one with the test rows
 train, test = df_downsampled[df_downsampled['is_train']==True], df_downsampled[df_downsampled['is_train']==False]
 
+train = shuffle(train)
+test = shuffle(test)
+
 features = train[train.columns[:7]]
 y = train['team_placement']
 x_test = test[test.columns[:7]]
@@ -64,10 +67,13 @@ clf.fit(features, y)
 filename = 'top10_Prob.pkl'
 joblib.dump(clf, filename)
 
+# Confusion Matrix
 preds = clf.predict(x_test)
 print(pd.crosstab(test['team_placement'], preds, rownames=['Actual'], colnames=['Predicted']))
+
+# Accuracy Scores
 print ('RF accuracy: TRAINING', clf.score(features,y))
 print ('RF accuracy: TESTING', clf.score(x_test,y_test))
 
-# For additional accuracy scores
+# Additional accuracy scores
 print (metrics.classification_report(test['team_placement'], predicted))
