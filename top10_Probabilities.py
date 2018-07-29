@@ -64,16 +64,8 @@ clf = RandomForestClassifier(n_jobs=-1, n_estimators = 100, random_state=42, max
 clf.fit(features, y)
 
 # Saving the model to disk
-filename = 'top10_Prob.pkl'
+filename = 'top10_Probabilities.pkl'
 joblib.dump(clf, filename)
 
-# Confusion Matrix
-preds = clf.predict(x_test)
-print(pd.crosstab(test['team_placement'], preds, rownames=['Actual'], colnames=['Predicted']))
-
-# Accuracy Scores
-print ('RF accuracy: TRAINING', clf.score(features,y))
-print ('RF accuracy: TESTING', clf.score(x_test,y_test))
-
-# Additional accuracy scores
-print (metrics.classification_report(test['team_placement'], predicted))
+# Printing out the the probabilities for first 5 test data 
+print(predict_proba(x_test)[:5])
