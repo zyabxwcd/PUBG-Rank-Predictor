@@ -5,7 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.utils import resample,shuffle
 
 # For saving the model to disk
-#from sklearn.externals import joblib
+from sklearn.externals import joblib
 
 # Load pandas
 import pandas as pd
@@ -64,8 +64,16 @@ clf = RandomForestClassifier(n_jobs=-1, n_estimators = 100, random_state=42, max
 clf.fit(features, y)
 
 # Saving the model to disk
-filename = 'top10_Probabilities.pkl'
+filename = 'top10_Prediction.pkl'
 joblib.dump(clf, filename)
 
-# Printing out the the probabilities for first 5 test data 
-print(predict_proba(x_test)[:5])
+# Confusion Matrix
+preds = clf.predict(x_test)
+print(pd.crosstab(test['team_placement'], preds, rownames=['Actual'], colnames=['Predicted']))
+
+# Accuracy Scores
+print ('RF accuracy: TRAINING', clf.score(features,y))
+print ('RF accuracy: TESTING', clf.score(x_test,y_test))
+
+# Additional accuracy scores
+print (metrics.classification_report(y_test, preds))
