@@ -1,6 +1,8 @@
 # Importing classifier
 from sklearn.ensemble import RandomForestClassifier
 
+from sklearn.utils import shuffle
+
 # For saving the model to disk
 from sklearn.externals import joblib
 
@@ -17,6 +19,8 @@ data = pd.read_csv("C:\\agg_match_stats_0.csv", nrows=1000000)
 value_list = list(range(1,11))
 df = data[data.team_placement.isin(value_list)].copy()
 df.drop(['date','match_id','match_mode','player_dist_ride','player_assists','player_name','team_id'], axis = 1, inplace = True)
+
+df = shuffle(df)
 
 # Selecting features and target
 features = df[df.columns[:7]]
