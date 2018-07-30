@@ -24,7 +24,7 @@ df1['team_placement'] = 1
 df2['team_placement'] = -1
 frames = [df1,df2]
 df = pd.concat(frames)
-df.drop(['date','match_id','match_mode','player_dist_ride','player_assists','player_name','team_id'], axis = 1, inplace = True)
+df.drop(['date','match_id','match_mode','game_size','player_dist_ride','player_assists','player_kills','player_dbno','player_name','team_id'], axis = 1, inplace = True)
 
 # Checking for missing values
 print(df.isnull().values.any())
@@ -59,9 +59,9 @@ train, test = df_downsampled[df_downsampled['is_train']==True], df_downsampled[d
 train = shuffle(train)
 test = shuffle(test)
 
-features = train[train.columns[:7]]
+features = train[train.columns[:4]]
 y = train['team_placement']
-x_test = test[test.columns[:7]]
+x_test = test[test.columns[:4]]
 y_test = test['team_placement']
 
 # Training the model
@@ -72,14 +72,17 @@ clf.fit(features, y)
 filename = 'top10_Prediction.pkl'
 joblib.dump(clf, filename)
 
-# Confusion Matrix
-preds = clf.predict(x_test)
-print(pd.crosstab(test['team_placement'], preds, rownames=['Actual'], colnames=['Predicted']))
-
 # Accuracy Scores
 print ('Internal Accuracy Score', clf.oob_score_)
 print ('RF accuracy: TRAINING', clf.score(features,y))
 print ('RF accuracy: TESTING', clf.score(x_test,y_test))
+
+# Confusion Matrix
+preds = clf.predict(x_test)
+print(pd.crosstab(y_test, preds, rownames=['Actual'], colnames=['Predicted']))
+
+# Feature Importances
+print (clf.feature_importances_)
 
 # Additional accuracy scores
 print (metrics.classification_report(y_test, preds))
