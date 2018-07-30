@@ -48,6 +48,11 @@ df_downsampled = pd.concat([df_majority_downsampled, df_minority])
 # Randomly marking 70% rows for training
 df_downsampled['is_train'] = np.random.uniform(0, 1, len(df_downsampled)) <= .70
 
+# Setting team_placement as categorical
+change = {"team_placement":     {-1: "!top 10", 1: "top 10"}}
+df_downsampled.replace(change, inplace=True)
+df_downsampled["team_placement"] = df_downsampled["team_placement"].astype('category')
+
 # Create two new dataframes, one with the training rows, one with the test rows
 train, test = df_downsampled[df_downsampled['is_train']==True], df_downsampled[df_downsampled['is_train']==False]
 
@@ -60,7 +65,7 @@ x_test = test[test.columns[:7]]
 y_test = test['team_placement']
 
 # Training the model
-clf = RandomForestClassifier(n_jobs=-1, n_estimators = 100, random_state=42, max_features=0.5)
+clf = RandomForestClassifier(n_jobs=-1, oob_score = True, n_estimators = 100, random_state=42)
 clf.fit(features, y)
 
 # Saving the model to disk
@@ -72,6 +77,7 @@ preds = clf.predict(x_test)
 print(pd.crosstab(test['team_placement'], preds, rownames=['Actual'], colnames=['Predicted']))
 
 # Accuracy Scores
+print ('Internal Accuracy Score', clf.oob_score_)
 print ('RF accuracy: TRAINING', clf.score(features,y))
 print ('RF accuracy: TESTING', clf.score(x_test,y_test))
 
