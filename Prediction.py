@@ -17,7 +17,7 @@ import numpy as np
 data = pd.read_csv("C:\\agg_match_stats_0.csv", nrows=500000)
 
 # Extracting needed data
-value_list = list(range(1,11))
+value_list = list(range(1,11)) # Set range as per requirement
 df1 = data[data.team_placement.isin(value_list)].copy()
 df2 = data[~data.team_placement.isin(value_list)].copy()
 df1['team_placement'] = 1
@@ -69,7 +69,7 @@ clf = RandomForestClassifier(n_jobs=-1, oob_score = True, n_estimators = 100, ra
 clf.fit(features, y)
 
 # Saving the model to disk
-filename = 'top10_Prediction.pkl'
+filename = 'top10.pkl'
 joblib.dump(clf, filename)
 
 # Accuracy Scores
