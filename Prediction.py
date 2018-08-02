@@ -33,8 +33,8 @@ print(df.isnull().values.any())
 print(df.team_placement.value_counts())
 
 # Resampling imbalanced data
-df_majority = df[df.team_placement==-1]
-df_minority = df[df.team_placement!=-1]
+df_majority = df[df.team_placement==-10]
+df_minority = df[df.team_placement!=-10]
 
 # Downsample majority class
 df_majority_downsampled = resample(df_majority, 
