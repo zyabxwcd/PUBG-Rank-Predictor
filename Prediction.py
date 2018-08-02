@@ -20,8 +20,8 @@ data = pd.read_csv("C:\\agg_match_stats_0.csv", nrows=500000)
 value_list = list(range(1,11)) # Set range as per requirement
 df1 = data[data.team_placement.isin(value_list)].copy()
 df2 = data[~data.team_placement.isin(value_list)].copy()
-df1['team_placement'] = 1
-df2['team_placement'] = -1
+df1['team_placement'] = 10
+df2['team_placement'] = -10
 frames = [df1,df2]
 df = pd.concat(frames)
 df.drop(['date','match_id','match_mode','game_size','player_dist_ride','player_assists','player_kills','player_dbno','player_name','team_id'], axis = 1, inplace = True)
@@ -83,6 +83,3 @@ print(pd.crosstab(y_test, preds, rownames=['Actual'], colnames=['Predicted']))
 
 # Feature Importances
 print (clf.feature_importances_)
-
-# Additional accuracy scores
-print (metrics.classification_report(y_test, preds))
